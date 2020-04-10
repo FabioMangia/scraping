@@ -1,0 +1,117 @@
+install.packages("data.table")
+install.packages("tidytext")
+library(data.table)
+library(tidytext)
+
+#set the right directory
+getwd()
+setwd("C:/Users/fabio/OneDrive/Documentos/RSM Data Analytics/Data Sources RSM/Adapted Data Sets")
+
+#create a data frame from the White Paper csv file
+dt.ev <- fread("adapted events 01012020.csv")
+
+# tokenize column with white paper titles
+dt.topics <- unnest_tokens(dt.ev[, list(1:.N, Event)], word, Event, token = "words")
+
+#list the 50 most frequent words per white paper title column
+dt.topics[, .N, by=word][order(-N)][1:50]
+
+#coding topic 1
+dt.ev[grep("AppDynamics", Event), topic_1 := "AppDynamics"]
+dt.ev[grep("Artificial", Event), topic_1 := "Artificial Intelligence"]
+dt.ev[grep("IA", Event), topic_1 := "Artificial Intelligence"]
+dt.ev[grep("artificial intelligence", Event), topic_1 := "Artificial Intelligence"]
+dt.ev[grep("Automation", Event), topic_1 := "RPA"]
+dt.ev[grep("Cloud", Event), topic_1 := "Cloud"]
+dt.ev[grep("Cultuurverandering", Event), topic_1 := "Cultural Change"]
+dt.ev[grep("data", Event), topic_1 := "Data"]
+dt.ev[grep("Design Thinking", Event), topic_1 := "Design Thinking"]
+dt.ev[grep("DevOps", Event), topic_1 := "DevOps"]
+dt.ev[grep("GRC", Event), topic_1 := "GRC"]
+dt.ev[grep("scale-ups", Event), topic_1 := "Scale ups"]
+dt.ev[grep("Service Management", Event), topic_1 := "Service Management"]
+dt.ev[grep("ServiceNow", Event), topic_1 := "ServiceNow"]
+dt.ev[grep("start-up denken", Event), topic_1 := "Strat-up mentality"]
+dt.ev[grep("Digitale Strategie", Event), topic_1 := "Digital Transformation"]
+dt.ev[grep("digitale Strategie", Event), topic_1 := "Digital Transformation"]
+dt.ev[grep("Transformation", Event), topic_1 := "Digital Transformation"]
+dt.ev[grep("Digital Economy", Event), topic_1 := "Digital Transformation"]
+dt.ev[grep("The Future", Event), topic_1 := "Digital Transformation"]
+dt.ev[grep("Rechtspraak", Event), topic_1 := "Digital Transformation"]
+dt.ev[grep("transformatie", Event), topic_1 := "Digital Transformation"]
+dt.ev[grep("Digitizing", Event), topic_1 := "Digital Transformation"]
+dt.ev[grep("nieuw spoor", Event), topic_1 := "Digital Transformation"]
+dt.ev[grep("optimaliseren", Event), topic_1 := "Optimalization"]
+
+#Coding topic 2
+dt.ev[grep("Outsourcing", Event), topic_2 := "Sourcing"]
+dt.ev[grep("Sourcing", Event), topic_2 := "Sourcing"]
+dt.ev[grep("Agile", Event), topic_2 := "Agile"]
+dt.ev[grep("onderscheidend", Event), topic_2 := "Agile"]
+dt.ev[grep("agile", Event), topic_2 := "Agile"]
+dt.ev[grep("High Performing", Event), topic_2 := "Agile"]
+dt.ev[grep("High Performance", Event), topic_2 := "Agile"]
+dt.ev[grep("innoveren", Event), topic_2 := "Innovation"]
+dt.ev[grep("Innoveren", Event), topic_2 := "Innovation"]
+dt.ev[grep("innovatie", Event), topic_2 := "Innovation"]
+dt.ev[grep("Pepsico", Event), topic_2 := "Innovation"]
+dt.ev[grep("Springstof", Event), topic_2 := "Innovation"]
+dt.ev[grep("SAFe", Event), topic_2 := "Agile"]
+dt.ev[grep("Visual Management", Event), topic_2 := "Obeya"]
+dt.ev[grep("Regievoering", Event), topic_2 := "Governance"]
+dt.ev[grep("regio", Event), topic_2 := "Governance"]
+dt.ev[grep("virtuele zorgorganisatie", Event), topic_2 := "Virtual Organization"]
+dt.ev[grep("Customer Experience", Event), topic_2 := "Customer Experience"]
+
+#Coding topic 3
+dt.ev[grep("Lean", Event), topic_3 := "Lean"]
+dt.ev[grep("ITIL", Event), topic_3 := "ITIL"]
+dt.ev[grep("Leadership", Event), topic_3 := "Leadership"]
+dt.ev[grep("SIAM", Event), topic_3 := "SIAM"]
+
+#coding QT
+dt.ev[grep("AppDynamics", Event), topic_4 := "QT"]
+dt.ev[grep("ServiceNow", Event), topic_4 := "QT"]
+dt.ev[grep("ServiceNow", Event), topic_4 := "QT"]
+
+#coding DS
+dt.ev[grep("Design Thinking", Event), topic_4 := "DS"]
+dt.ev[grep("innoveren", Event), topic_4 := "DS"]
+dt.ev[grep("innovatie", Event), topic_4 := "DS"]
+dt.ev[grep("Springstof", Event), topic_4 := "DS"]
+dt.ev[grep("Digital", Event), topic_4 := "DS"]
+dt.ev[grep("Finacials", Event), topic_4 := "DS"]
+dt.ev[grep("Inteligencia", Event), topic_4 := "DS"]
+dt.ev[grep("Gobierno", Event), topic_4 := "DS"]
+dt.ev[grep("Rechtspraak", Event), topic_4 := "DS"]
+dt.ev[grep("Digitale", Event), topic_4 := "DS"]
+dt.ev[grep("digitale", Event), topic_4 := "DS"]
+dt.ev[grep("Digital", Event), topic_4 := "DS"]
+dt.ev[grep("transformatie", Event), topic_4 := "DS"]
+dt.ev[grep("data", Event), topic_4 := "DS"]
+dt.ev[grep("Experience", Event), topic_4 := "DS"]
+dt.ev[grep("Robot", Event), topic_4 := "DS"]
+dt.ev[grep("Spoorwegen", Event), topic_4 := "DS"]
+dt.ev[grep("zorgorganisatie", Event), topic_4 := "DS"]
+
+#Coding HPT
+dt.ev[grep("ITIL", Event), topic_4 := "HPT"]
+dt.ev[grep("ITSM", Event), topic_4 := "HPT"]
+dt.ev[grep("DevOps", Event), topic_4 := "HPT"]
+dt.ev[grep("Agile", Event), topic_4 := "HPT"]
+dt.ev[grep("Leiderschap", Event), topic_4 := "HPT"]
+dt.ev[grep("Lean", Event), topic_4 := "HPT"]
+dt.ev[grep("SAFe", Event), topic_4 := "HPT"]
+dt.ev[grep("Performing", Event), topic_4 := "HPT"]
+dt.ev[grep("Performance", Event), topic_4 := "HPT"]
+dt.ev[grep("Cultuurverandering", Event), topic_4 := "HPT"]
+
+#Coding CIO
+dt.ev[grep("Outsourcing", Event), topic_4 := "CIO"]
+dt.ev[grep("Sourcing", Event), topic_4 := "CIO"]
+dt.ev[grep("SIAM", Event), topic_4 := "CIO"]
+dt.ev[grep("GRC", Event), topic_4 := "CIO"]
+dt.ev[grep("Cloud", Event), topic_4 := "CIO"]
+dt.ev[grep("Regelingen", Event), topic_4 := "CIO"]
+
+write.csv(dt.ev, file="EVENTSCODED January.csv")
