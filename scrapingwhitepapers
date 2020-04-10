@@ -1,0 +1,132 @@
+install.packages("data.table")
+install.packages("tidytext")
+library(data.table)
+library(tidytext)
+
+#set the right directory
+getwd()
+setwd("C:/Users/fabio/OneDrive/Documentos/RSM Data Analytics/Data Sources RSM/Adapted Data Sets")
+
+#create a data frame from the White Paper csv file
+dt.wp <- fread("WP_Gen_NL_adapted 30122019.csv")
+
+# tokenize column with white paper titles
+dt.words <- unnest_tokens(dt.wp[, list(1:.N, Title)], word, Title, token = "words")
+
+#list the 50 most frequent words per white paper title column
+dt.words[, .N, by=word][order(-N)][1:50]
+
+#Automate the coding of white papers into topics 1
+
+#Coding DeVops, Kaizen, Info Tech and Leadership into topic 1
+dt.wp[grep("DevOps", Title), topic_1 := "DevOps"]
+dt.wp[grep("Kaizen", Title), topic_1 := "Kaizen"]
+dt.wp[grep("Information", Title), topic_1 := "Information Technology"]
+dt.wp[grep("Leadership", Title), topic_1 := "Leadership"]
+dt.wp[grep("Leiderschap", Title), topic_1 := "Leadership"]
+
+#Coding CSR and Governance into topic 1
+dt.wp[grep("CSR", Title), topic_1 := "CSR"]
+dt.wp[grep("Regie", Title), topic_1 := "Governance"]
+dt.wp[grep("Governance", Title), topic_1 := "Governance"]
+dt.wp[grep("organiseren", Title), topic_1 := "Governance"]
+
+#Coding Digital Transformation into topic 1
+dt.wp[grep("transformatie", Title), topic_1 := "Digital Transformation"]
+dt.wp[grep("transformation", Title), topic_1 := "Digital Transformation"]
+dt.wp[grep("Transformation", Title), topic_1 := "Digital Transformation"]
+dt.wp[grep("Sustainable", Title), topic_1 := "Sustainable"]
+
+#Coding Business Process, API, Customer Experience anda DATA into topic 1
+dt.wp[grep("Business", Title), topic_1 := "Business Process"]
+dt.wp[grep("API", Title), topic_1 := "API"]
+dt.wp[grep("Customer", Title), topic_1 := "Customer Experience"]
+dt.wp[grep("data", Title), topic_1 := "Data"]
+dt.wp[grep("data-gedreven", Title), topic_1 := "Data"]
+dt.wp[grep("Data-Driven", Title), topic_1 := "Data"]
+dt.wp[grep("GRC", Title), topic_1 := "GRC"]
+
+#Coding Imporvement, Info Planning, Obeya and Procurement into Topic 1
+dt.wp[grep("verbetering", Title), topic_1 := "Improvement"]
+dt.wp[grep("Verbeteren", Title), topic_1 := "Improvement"]
+dt.wp[grep("Informatieplanning", Title), topic_1 := "Information Planning"]
+dt.wp[grep("Obeya", Title), topic_1 := "Obeya"]
+dt.wp[grep("Procurement", Title), topic_1 := "Procurement"]
+
+#Coding Robitics, Service Catalogue and Service Center, Service MGt and SIA into topic 1
+dt.wp[grep("Robotics", Title), topic_1 := "Robotics"]
+dt.wp[grep("robotics", Title), topic_1 := "Robotics"]
+dt.wp[grep("Catalogue", Title), topic_1 := "Service Catalogue"]
+dt.wp[grep("Center", Title), topic_1 := "Service Center"]
+dt.wp[grep("richtlijn", Title), topic_1 := "Service Management"]
+dt.wp[grep("(SIAM)", Title), topic_1 := "SIAM"]
+
+
+#Automate the coding of white papers into topics 2
+
+#Coding Agile into topic 2
+dt.wp[grep("Agile", Title), topic_2 := "Agile"]
+dt.wp[grep("agile", Title), topic_2 := "Agile"]
+dt.wp[grep("Agility", Title), topic_2 := "Agile"]
+
+#Coding Lean into topic 2
+dt.wp[grep("Lean", Title), topic_2 := "Lean"]
+dt.wp[grep("Lean-Agile", Title), topic_2 := "Lean"]
+
+#Coding Sourcing into topic 2
+dt.wp[grep("Outsourcing", Title), topic_2 := "Sourcing"]
+dt.wp[grep("HR-outsourcing", Title), topic_2 := "Sourcing"]
+dt.wp[grep("outsourcing", Title), topic_2 := "Sourcing"]
+dt.wp[grep("Sourcingsstrategieën", Title), topic_2 := "Sourcing"]
+
+#Coding ITIL, It Services, Supplier Relationship and Cloud into topic 2
+dt.wp[grep("ITIL", Title), topic_2 := "ITIL"]
+dt.wp[grep("prestaties", Title), topic_2 := "IT Services"]
+dt.wp[grep("Services", Title), topic_2 := "IT Services"]
+dt.wp[grep("klant", Title), topic_2 := "Supplier Relationship"]
+dt.wp[grep("Supplier", Title), topic_2 := "Supplier Relationship"]
+dt.wp[grep("Cloud", Title), topic_2 := "Cloud"]
+
+#Coding Digital Strategy
+dt.wp[grep("data", Title), topic_3 := "DS"]
+dt.wp[grep("Robotics", Title), topic_3 := "DS"]
+dt.wp[grep("Digitale", Title), topic_3 := "DS"]
+dt.wp[grep("API", Title), topic_3 := "DS"]
+dt.wp[grep("Customer", Title), topic_3 := "DS"]
+dt.wp[grep("robotics", Title), topic_3 := "DS"]
+dt.wp[grep("data-gedreven", Title), topic_3 := "DS"]
+dt.wp[grep("Data-Driven", Title), topic_3 := "DS"]
+dt.wp[grep("Digital", Title), topic_3 := "DS"]
+
+#Coding HPT
+dt.wp[grep("DevOps", Title), topic_3 := "HPT"]
+dt.wp[grep("Kaizen", Title), topic_3 := "HPT"]
+dt.wp[grep("Lean", Title), topic_3 := "HPT"]
+dt.wp[grep("Agile", Title), topic_3 := "HPT"]
+dt.wp[grep("Lean-Agile", Title), topic_3 := "HPT"]
+dt.wp[grep("prestaties", Title), topic_3 := "HPT"]
+dt.wp[grep("Global", Title), topic_3 := "HPT"]
+
+#Coding CIO
+dt.wp[grep("Outsourcing", Title), topic_3 := "CIO"]
+dt.wp[grep("Sourcing", Title), topic_3 := "CIO"]
+dt.wp[grep("Sourcingsstrategieën", Title), topic_3 := "CIO"]
+dt.wp[grep("sourcing", Title), topic_3 := "CIO"]
+dt.wp[grep("Cloud", Title), topic_3 := "CIO"]
+dt.wp[grep("cloud", Title), topic_3 := "CIO"]
+dt.wp[grep("Procurement", Title), topic_3 := "CIO"]
+dt.wp[grep("Supplier", Title), topic_3 := "CIO"]
+dt.wp[grep("leverancier", Title), topic_3 := "CIO"]
+dt.wp[grep("Catalogus", Title), topic_3 := "CIO"]
+dt.wp[grep("Catalogue", Title), topic_3 := "CIO"]
+dt.wp[grep("Integration", Title), topic_3 := "CIO"]
+dt.wp[grep("Shared", Title), topic_3 := "CIO"]
+dt.wp[grep("Informatieplanning", Title), topic_3 := "CIO"]
+dt.wp[grep("HR-outsourcing", Title), topic_3 := "CIO"]
+dt.wp[grep("Regie", Title), topic_3 := "CIO"]
+
+
+
+write.csv(dt.wp, file="WPCODED Janurary.csv")
+
+
